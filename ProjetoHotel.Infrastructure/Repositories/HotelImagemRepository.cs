@@ -1,5 +1,7 @@
 ﻿using ProjetoHotel.Domain.Entities;
 using ProjetoHotel.Infrastructure.Context;
+using System;
+using System.Threading.Tasks;
 
 namespace ProjetoHotel.Infrastructure.Repositories
 {

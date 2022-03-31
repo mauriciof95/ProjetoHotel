@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjetoHotel.Domain.Entities;
+using ProjetoHotel.Helpers;
 using ProjetoHotel.Infrastructure.Context;
 using ProjetoHotel.Services;
 
@@ -16,10 +20,12 @@ namespace ProjetoHotel.Controllers
     {
 
         private readonly HotelServices _services;
+        private IWebHostEnvironment _hostingEnvironment;
 
-        public HotelController(HotelServices services)
+        public HotelController(HotelServices services, IWebHostEnvironment environment)
         {
             _services = services;
+            _hostingEnvironment = environment;
         }
 
         public async Task<IActionResult> Index()
@@ -45,9 +51,18 @@ namespace ProjetoHotel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Hotel hotel)
         {
+            IFormFileCollection imagens = Request.Form.Files;
+            List<string> imagem_names = null;
+
             if (ModelState.IsValid)
             {
-                await _services.Cadastrar(hotel);
+                if(imagens.Count() > 0)
+                {
+                    var processarImagem = new ProcessarImagem(_hostingEnvironment);
+                    imagem_names = processarImagem.SalvarImagem(imagens);
+                }
+
+                await _services.Cadastrar(hotel, imagem_names);
                 return RedirectToAction(nameof(Index));
             }
             return View(hotel);
@@ -89,8 +104,8 @@ namespace ProjetoHotel.Controllers
             }
         }
 
-        [HttpDelete("{id:long}")]
-        public async Task<IActionResult> Delete(long id)
+        [HttpPost("deletar/{id:long}")]
+        public async Task<IActionResult> Deletar(long id)
         {
             await _services.Deletar(id);
             return RedirectToAction(nameof(Index));
