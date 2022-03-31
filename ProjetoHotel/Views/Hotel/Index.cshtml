@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ProjetoHotel.Domain.Entities.Hotel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de Hoteis</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Cadastrar</a>
+</p>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Endereco</th>
+            <th>Descrição</th>
+            <th>Imagens</th>
+            <th colspan="2" class="text-center">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                <td>@Html.DisplayFor(modelItem => item.CNPJ)</td>
+                <td>@Html.DisplayFor(modelItem => item.Endereco)</td>
+                <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
+                <td></td>
+                <td class="text-center">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <a class="btn btn-primary" asp-action="editar" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger" asp-action="deletar" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

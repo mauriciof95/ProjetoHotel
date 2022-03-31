@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoHotel", "ProjetoHotel\ProjetoHotel.csproj", "{C47312F7-EA91-44DF-8CD7-2D2130A0CB9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoHotel", "ProjetoHotel\ProjetoHotel.csproj", "{C47312F7-EA91-44DF-8CD7-2D2130A0CB9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoHotel.Domain", "ProjetoHotel.Domain\ProjetoHotel.Domain.csproj", "{C67D06AB-9BE9-4C85-896E-242AA2107B9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoHotel.Domain", "ProjetoHotel.Domain\ProjetoHotel.Domain.csproj", "{C67D06AB-9BE9-4C85-896E-242AA2107B9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoHotel.Infrastructure", "ProjetoHotel.Infrastructure\ProjetoHotel.Infrastructure.csproj", "{8F5F164A-1432-4A95-9519-DF00B2B62939}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoHotel.Infrastructure", "ProjetoHotel.Infrastructure\ProjetoHotel.Infrastructure.csproj", "{8F5F164A-1432-4A95-9519-DF00B2B62939}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoHotel.Services", "ProjetoHotel.Services\ProjetoHotel.Services.csproj", "{C42CCBDD-FA77-4826-BEAA-96D9D541B9FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoHotel.Services", "ProjetoHotel.Services\ProjetoHotel.Services.csproj", "{C42CCBDD-FA77-4826-BEAA-96D9D541B9FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

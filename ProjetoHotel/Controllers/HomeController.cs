@@ -1,17 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProjetoHotel.Infrastructure.Context;
+using ProjetoHotel.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace ProjetoHotel.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private HotelServices _hotelServices;
+
+        public HomeController(SqlDbContext context)
         {
-            return View();
+            _hotelServices = new HotelServices(context);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                var hoteis = await _hotelServices.ListarTudo();
+                return View(hoteis);
+            }
+            catch(Exception ex)
+            {
+                return View(ex);
+            }
         }
     }
 }

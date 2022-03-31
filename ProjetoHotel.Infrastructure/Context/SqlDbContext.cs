@@ -5,7 +5,7 @@ namespace ProjetoHotel.Infrastructure.Context
 {
     public class SqlDbContext : DbContext
     {
-        public static readonly string ConnectionString = "Server=.;Database=Hotel_DB;User Id=sa;Password=123456;";
+        public static readonly string ConnectionString = "Server=.;Database=Hotel_DB;User Id=sa;Password=090112;";
 
         public SqlDbContext(DbContextOptions<SqlDbContext> options) : base(options) 
         {

@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Repositories\HotelRepository\" />
-    <Folder Include="Repositories\QuartoRepository\" />
   </ItemGroup>
 
   <ItemGroup>

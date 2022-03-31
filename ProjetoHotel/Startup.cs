@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjetoHotel.Infrastructure.Context;
 using ProjetoHotel.Infrastructure.Repositories;
+using ProjetoHotel.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,8 @@ namespace ProjetoHotel
             services.AddDbContext<SqlDbContext>(o => {
                 o.UseSqlServer(SqlDbContext.ConnectionString);
             });
+
+            services.AddScoped<HotelServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
