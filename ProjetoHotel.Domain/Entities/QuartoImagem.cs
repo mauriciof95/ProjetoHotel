@@ -19,7 +19,7 @@ namespace ProjetoHotel.Domain.Entities
 
 
 
-        [ForeignKey("quarto_id")]
+        [ForeignKey("Quarto_Id")]
         public Quarto Quarto { get; set; }
     }
 }

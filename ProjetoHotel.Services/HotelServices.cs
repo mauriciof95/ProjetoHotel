@@ -1,4 +1,5 @@
 ﻿using ProjetoHotel.Domain.Entities;
+using ProjetoHotel.Domain.Models;
 using ProjetoHotel.Infrastructure.Context;
 using ProjetoHotel.Infrastructure.Repositories;
 using System.Collections.Generic;
@@ -34,6 +35,11 @@ namespace ProjetoHotel.Services
                 }
             }
             return await _repository.Cadastrar(obj);
+        }
+
+        public async Task<List<SelectModel>> RetornarHoteisSelect()
+        {
+            return await _repository.RetornarHoteisSelect();
         }
 
         public async Task<ICollection<Hotel>> ListarTudo()

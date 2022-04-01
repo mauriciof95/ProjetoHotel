@@ -1,0 +1,87 @@
+﻿@model ProjetoHotel.Domain.Entities.Quarto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h4>Cadastrar Quarto</h4>
+<hr />
+
+<form asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Numero_Ocupantes" class="control-label"></label>
+                <input asp-for="Numero_Ocupantes" class="form-control" />
+                <span asp-validation-for="Numero_Ocupantes" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Numero_Adultos" class="control-label"></label>
+                <input asp-for="Numero_Adultos" class="form-control" />
+                <span asp-validation-for="Numero_Adultos" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Numero_Criancas" class="control-label"></label>
+                <input asp-for="Numero_Criancas" class="form-control" />
+                <span asp-validation-for="Numero_Criancas" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Preco" class="control-label"></label>
+                <input asp-for="Preco" class="form-control" />
+                <span asp-validation-for="Preco" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="form-group">
+                <label asp-for="Hotel_Id" class="control-label">Hotel</label>
+                <select asp-for="Hotel_Id" class="form-control" asp-items="ViewBag.Hoteis"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="custom-file">
+                <label class="custom-file-label">Imagem</label>
+                <input type="file" class="custom-file-input" name="imagem" />
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-12">
+            <input type="submit" value="Cadastrar" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-danger">Cancelar</a>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

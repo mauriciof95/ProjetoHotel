@@ -12,9 +12,9 @@ namespace ProjetoHotel.Infrastructure.Migrations
                 {
                     id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    nome = table.Column<string>(nullable: false),
-                    cnpj = table.Column<string>(nullable: true),
-                    endereco = table.Column<string>(nullable: true),
+                    nome = table.Column<string>(maxLength: 50, nullable: false),
+                    cnpj = table.Column<string>(maxLength: 14, nullable: false),
+                    endereco = table.Column<string>(maxLength: 100, nullable: false),
                     descricao = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -28,7 +28,7 @@ namespace ProjetoHotel.Infrastructure.Migrations
                 {
                     id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    image_url = table.Column<string>(nullable: true),
+                    image_url = table.Column<string>(nullable: false),
                     hotel_id = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -39,7 +39,7 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         column: x => x.hotel_id,
                         principalTable: "hotel",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,7 +63,7 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         column: x => x.hotel_id,
                         principalTable: "hotel",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,7 +72,7 @@ namespace ProjetoHotel.Infrastructure.Migrations
                 {
                     id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    image_url = table.Column<string>(nullable: true),
+                    image_url = table.Column<string>(nullable: false),
                     quarto_id = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -83,7 +83,7 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         column: x => x.quarto_id,
                         principalTable: "quarto",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

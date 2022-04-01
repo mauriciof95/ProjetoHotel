@@ -18,8 +18,8 @@ namespace ProjetoHotel.Domain.Entities
         public long Hotel_Id { get; set; }
 
 
-
-        [ForeignKey("hotel_id")]
+        //nota: aparentemente o nome tem que ser o mesmo da prop respeitando CamelCase, e não o nome da coluna, para o EF nao gerar 2 fk
+        [ForeignKey("Hotel_Id")]
         public Hotel Hotel { get; set; }
     }
 }

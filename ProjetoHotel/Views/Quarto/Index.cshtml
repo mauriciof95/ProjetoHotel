@@ -1,10 +1,10 @@
-﻿@model IEnumerable<ProjetoHotel.Domain.Entities.Hotel>
+﻿@model IEnumerable<ProjetoHotel.Domain.Entities.Quarto>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Lista de Hoteis</h1>
+<h1>Lista de Quartos</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Cadastrar</a>
@@ -14,10 +14,11 @@
         <thead class="thead-dark">
             <tr>
                 <th>Nome</th>
-                <th>CNPJ</th>
-                <th>Endereco</th>
-                <th>Descrição</th>
-                <th>Imagens</th>
+                <th>Nº Ocupantes</th>
+                <th>Nº Adultos</th>
+                <th>Nº Criancas</th>
+                <th>Preço R$</th>
+                <th>Hotel</th>
                 <th colspan="2" class="text-center">Ações</th>
             </tr>
         </thead>
@@ -26,10 +27,11 @@
             {
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.Nome)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CNPJ)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Endereco)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
-                    <td></td>
+                    <td>@Html.DisplayFor(modelItem => item.Numero_Ocupantes)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Numero_Adultos)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Numero_Criancas)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Preco)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Hotel.Nome)</td>
                     <td class="text-center">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a class="btn btn-primary" asp-action="editar" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>

@@ -35,4 +35,8 @@
     <ProjectReference Include="..\ProjetoHotel.Domain\ProjetoHotel.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

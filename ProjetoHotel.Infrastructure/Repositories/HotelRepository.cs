@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjetoHotel.Domain.Entities;
+using ProjetoHotel.Domain.Models;
 using ProjetoHotel.Infrastructure.Context;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProjetoHotel.Infrastructure.Repositories
@@ -34,6 +36,16 @@ namespace ProjetoHotel.Infrastructure.Repositories
 
             _context.Remove(obj);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<SelectModel>> RetornarHoteisSelect()
+        {
+            return await _context.Hotel.AsNoTracking()
+                                 .Select(x => new SelectModel
+                                 {
+                                     Id = x.Id,
+                                     Descricao = x.Nome
+                                 }).ToListAsync();
         }
     }
 }
