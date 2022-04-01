@@ -5,7 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Compile Remove="Configuration\**" />
+    <EmbeddedResource Remove="Configuration\**" />
+    <None Remove="Configuration\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20220331212108_migracao inicial.cs" />
+    <Compile Remove="Migrations\20220331212108_migracao inicial.Designer.cs" />
+    <Compile Remove="Migrations\20220331212354_migracao inicial.cs" />
+    <Compile Remove="Migrations\20220331212354_migracao inicial.Designer.cs" />
+    <Compile Remove="Migrations\20220401000515_teste.cs" />
+    <Compile Remove="Migrations\20220401000515_teste.Designer.cs" />
+    <Compile Remove="Migrations\20220401001253_adicionado mais caracteristicas nas columnas da tabela hotel.cs" />
+    <Compile Remove="Migrations\20220401001253_adicionado mais caracteristicas nas columnas da tabela hotel.Designer.cs" />
+    <Compile Remove="Migrations\20220401001418_adicionado mais caracteristicas nas columnas da tabela hotel.cs" />
+    <Compile Remove="Migrations\20220401001418_adicionado mais caracteristicas nas columnas da tabela hotel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

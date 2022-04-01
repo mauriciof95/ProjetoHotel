@@ -17,20 +17,20 @@ namespace ProjetoHotel.Domain.Entities
         public int Numero_Adultos { get; set; }
 
         [Column("numero_criancas", Order = 4)]
-        public string Numero_Criancas { get; set; }
+        public int Numero_Criancas { get; set; }
 
         [Column("preco", Order = 5)]
         public decimal Preco { get; set; }
 
         [Column("hotel_id", Order = 4)]
         [Required]
-        public long Hotel_Id { get; set; }
+        public virtual long Hotel_Id { get; set; }
 
 
         [ForeignKey("hotel_id")]
-        public Hotel Hotel { get; set; }
+        public virtual Hotel Hotel { get; set; }
 
-        public ICollection<QuartoImagem> Imagens { get; set; }
+        public virtual ICollection<QuartoImagem> Imagens { get; set; }
 
     }
 }

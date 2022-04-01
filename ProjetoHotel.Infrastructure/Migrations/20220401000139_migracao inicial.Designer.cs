@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetoHotel.Infrastructure.Context;
 
 namespace ProjetoHotel.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    partial class SqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220401000139_migracao inicial")]
+    partial class migracaoinicial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,26 +30,21 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CNPJ")
-                        .IsRequired()
                         .HasColumnName("cnpj")
-                        .HasColumnType("nvarchar(14)")
-                        .HasMaxLength(14);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Descricao")
                         .HasColumnName("descricao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Endereco")
-                        .IsRequired()
                         .HasColumnName("endereco")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnName("nome")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -67,7 +64,6 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Image_Url")
-                        .IsRequired()
                         .HasColumnName("image_url")
                         .HasColumnType("nvarchar(max)");
 
@@ -134,7 +130,6 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Image_Url")
-                        .IsRequired()
                         .HasColumnName("image_url")
                         .HasColumnType("nvarchar(max)");
 

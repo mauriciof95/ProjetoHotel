@@ -10,8 +10,8 @@ using ProjetoHotel.Infrastructure.Context;
 namespace ProjetoHotel.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    [Migration("20220331004525_Tabelas Iniciais")]
-    partial class TabelasIniciais
+    [Migration("20220401001507_adicionado mais caracteristicas nas columnas da tabela hotel")]
+    partial class adicionadomaiscaracteristicasnascolumnasdatabelahotel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,24 +30,26 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CNPJ")
+                        .IsRequired()
                         .HasColumnName("cnpj")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(14)")
+                        .HasMaxLength(14);
 
                     b.Property<string>("Descricao")
                         .HasColumnName("descricao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Endereco")
+                        .IsRequired()
                         .HasColumnName("endereco")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image_Url")
-                        .HasColumnName("image_url")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnName("nome")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -67,6 +69,7 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Image_Url")
+                        .IsRequired()
                         .HasColumnName("image_url")
                         .HasColumnType("nvarchar(max)");
 
@@ -101,9 +104,9 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         .HasColumnName("numero_adultos")
                         .HasColumnType("int");
 
-                    b.Property<string>("Numero_Criancas")
+                    b.Property<int>("Numero_Criancas")
                         .HasColumnName("numero_criancas")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<int>("Numero_Ocupantes")
                         .HasColumnName("numero_ocupantes")
@@ -133,6 +136,7 @@ namespace ProjetoHotel.Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Image_Url")
+                        .IsRequired()
                         .HasColumnName("image_url")
                         .HasColumnType("nvarchar(max)");
 
@@ -161,7 +165,7 @@ namespace ProjetoHotel.Infrastructure.Migrations
             modelBuilder.Entity("ProjetoHotel.Domain.Entities.Quarto", b =>
                 {
                     b.HasOne("ProjetoHotel.Domain.Entities.Hotel", "Hotel")
-                        .WithMany("quartos")
+                        .WithMany("Quartos")
                         .HasForeignKey("hotel_id");
                 });
 

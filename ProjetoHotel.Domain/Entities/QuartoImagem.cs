@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace ProjetoHotel.Domain.Entities
     {
 
         [Column("image_url", Order = 1)]
+        [Required]
         public string Image_Url { get; set; }
 
         [Column("quarto_id", Order = 2)]
