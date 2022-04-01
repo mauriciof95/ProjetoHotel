@@ -6,6 +6,20 @@
 
 <h1>Lista de Hoteis</h1>
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="msg_box msg_box_error">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="msg_box msg_box_success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <p>
     <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Cadastrar</a>
 </p>

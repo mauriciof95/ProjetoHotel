@@ -4,6 +4,12 @@
     ViewData["Title"] = "Create";
 }
 
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="msg_box msg_box_warning">
+        @TempData["WarningMessage"]
+    </div>
+}
 
 <h4>Cadastrar Quarto</h4>
 <hr />

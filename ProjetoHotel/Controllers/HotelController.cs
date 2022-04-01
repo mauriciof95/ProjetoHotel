@@ -44,21 +44,32 @@ namespace ProjetoHotel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Hotel hotel)
         {
-            IFormFileCollection imagens = Request.Form.Files;
-            List<string> imagem_names = null;
-
-            if (ModelState.IsValid)
+            try
             {
-                if(imagens.Count() > 0)
+                IFormFileCollection imagens = Request.Form.Files;
+                List<string> imagem_names = null;
+
+                if (ModelState.IsValid)
                 {
-                    var processarImagem = new ProcessarImagem(_hostingEnvironment);
-                    imagem_names = processarImagem.SalvarImagem(imagens);
+                    if (imagens.Count() > 0)
+                    {
+                        var processarImagem = new ProcessarImagem(_hostingEnvironment);
+                        imagem_names = processarImagem.SalvarImagem(imagens);
+                    }
+
+                    await _services.Cadastrar(hotel, imagem_names);
+                    TempData["SuccessMessage"] = "Cadastrado com sucesso!";
+                    return RedirectToAction(nameof(Index));
                 }
 
-                await _services.Cadastrar(hotel, imagem_names);
-                return RedirectToAction(nameof(Index));
+                TempData["WarningMessage"] = "Verifique se os campos estão preenchidos corretamente.";
+                return View(hotel);
             }
-            return View(hotel);
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Não foi possivel cadastrar";
+                return View(hotel);
+            }
         }
 
 
@@ -76,32 +87,47 @@ namespace ProjetoHotel.Controllers
 
         [HttpPost("editar/{id:long}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Hotel obj, long id)
+        public async Task<IActionResult> Edit(Hotel hotel, long id)
         {
             try
             {
-                if (id != obj.Id)
+                if (id != hotel.Id)
                 {
                     return NotFound();
                 }
 
                 if (ModelState.IsValid)
                 {
-                    obj = await _services.Editar(obj, id);
+                    hotel = await _services.Editar(hotel, id);
+                    TempData["SuccessMessage"] = "Editado com sucesso!";
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+
+                TempData["WarningMessage"] = "Verifique se os campos estão preenchidos corretamente.";
+                return View(hotel);
             }
             catch(Exception) 
             {
-                throw;
+                TempData["ErrorMessage"] = "Aconteceu um problema ao Editar.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
         [HttpPost("deletar/{id:long}")]
         public async Task<IActionResult> Deletar(long id)
         {
-            await _services.Deletar(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _services.Deletar(id);
+
+                TempData["SuccessMessage"] = "Deletado com sucesso!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Aconteceu um problema ao deletar.";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

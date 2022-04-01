@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjetoHotel.Domain.Entities;
 using ProjetoHotel.Helpers;
 using ProjetoHotel.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,21 +43,32 @@ namespace ProjetoHotel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Quarto quarto)
         {
-            IFormFileCollection imagens = Request.Form.Files;
-            List<string> imagem_names = null;
-
-            if (ModelState.IsValid)
+            try
             {
-                if (imagens.Count() > 0)
+                IFormFileCollection imagens = Request.Form.Files;
+                List<string> imagem_names = null;
+
+                if (ModelState.IsValid)
                 {
-                    var processarImagem = new ProcessarImagem(_hostingEnvironment);
-                    imagem_names = processarImagem.SalvarImagem(imagens);
+                    if (imagens.Count() > 0)
+                    {
+                        var processarImagem = new ProcessarImagem(_hostingEnvironment);
+                        imagem_names = processarImagem.SalvarImagem(imagens);
+                    }
+                    await _services.Cadastrar(quarto, imagem_names);
+                    TempData["SuccessMessage"] = "Cadastrado com sucesso!";
+                    return RedirectToAction(nameof(Index));
                 }
-                await _services.Cadastrar(quarto, imagem_names);
-                return RedirectToAction(nameof(Index));
+                ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
+                TempData["WarningMessage"] = "Verifique se os campos estão preenchidos corretamente.";
+                return View(quarto);
             }
-            ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
-            return View(quarto);
+            catch (Exception)
+            {
+                ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
+                TempData["ErrorMessage"] = "Não foi possivel cadastrar";
+                return View(quarto);
+            }
         }
 
         [HttpGet("editar/{id:long}")]
@@ -85,24 +97,36 @@ namespace ProjetoHotel.Controllers
 
                 if (ModelState.IsValid)
                 {
-
                     quarto = await _services.Editar(quarto, id);
+                    TempData["SuccessMessage"] = "Editado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
+                TempData["WarningMessage"] = "Verifique se os campos estão preenchidos corretamente.";
                 return View(quarto);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                throw;
+                TempData["ErrorMessage"] = "Aconteceu um problema ao Editar.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
         [HttpPost("deletar/{id:long}")]
         public async Task<IActionResult> Deletar(long id)
         {
-            await _services.Deletar(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _services.Deletar(id);
+
+                TempData["SuccessMessage"] = "Deletado com sucesso!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Aconteceu um problema ao deletar.";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

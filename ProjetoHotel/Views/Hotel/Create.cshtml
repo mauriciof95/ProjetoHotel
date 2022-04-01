@@ -4,6 +4,13 @@
     ViewData["Title"] = "Cadastrar Hotel";
 }
 
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="msg_box msg_box_warning">
+        @TempData["WarningMessage"]
+    </div>
+}
+
 <h4>Cadastrar Hotel</h4>
 <hr />
 
@@ -50,7 +57,7 @@
         <div class="col-12">
             <div class="custom-file">
                 <label class="custom-file-label">Imagem</label>
-                <input type="file" class="custom-file-input" name="imagem"/>
+                <input type="file" class="custom-file-input" name="imagem" />
             </div>
         </div>
     </div>
