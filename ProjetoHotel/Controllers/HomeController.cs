@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjetoHotel.Infrastructure.Context;
-using ProjetoHotel.Services;
-using System;
 using System.Threading.Tasks;
 
 namespace ProjetoHotel.Controllers

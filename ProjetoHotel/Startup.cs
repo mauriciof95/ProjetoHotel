@@ -7,11 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjetoHotel.Infrastructure.Context;
 using ProjetoHotel.Infrastructure.Repositories;
-using ProjetoHotel.Services;
+using ProjetoHotel.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ProjetoHotel.Helpers;
 
 namespace ProjetoHotel
 {
@@ -33,13 +34,15 @@ namespace ProjetoHotel
                 o.UseSqlServer(SqlDbContext.ConnectionString);
             });
 
-            services.AddScoped<HotelServices>();
-            services.AddScoped<QuartoServices>();
+            services.AddScoped<HotelBusiness>();
+            services.AddScoped<QuartoBusiness>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            ImagemHelper.pathString = env.WebRootPath;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

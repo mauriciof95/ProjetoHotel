@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjetoHotel.Domain.Entities;
+using ProjetoHotel.Domain.Models.Exceptions;
 using ProjetoHotel.Helpers;
 using ProjetoHotel.Infrastructure.Context;
-using ProjetoHotel.Services;
+using ProjetoHotel.Business;
+using ProjetoHotel.Domain.Models.Request;
 
 namespace ProjetoHotel.Controllers
 {
@@ -19,18 +21,15 @@ namespace ProjetoHotel.Controllers
     public class HotelController : Controller
     {
 
-        private readonly HotelServices _services;
-        private IWebHostEnvironment _hostingEnvironment;
+        private readonly HotelBusiness _business;
 
-        public HotelController(HotelServices services, IWebHostEnvironment environment)
-        {
-            _services = services;
-            _hostingEnvironment = environment;
-        }
+        public HotelController(HotelBusiness services)
+            => _business = services;
+        
 
         public async Task<IActionResult> Index()
         {
-            return View(await _services.ListarTudo());
+            return View(await _business.ListarTudo());
         }
 
         [HttpGet("cadastrar")]
@@ -53,11 +52,10 @@ namespace ProjetoHotel.Controllers
                 {
                     if (imagens.Count() > 0)
                     {
-                        var processarImagem = new ProcessarImagem(_hostingEnvironment);
+                        var processarImagem = new ImagemHelper();
                         imagem_names = processarImagem.SalvarImagem(imagens);
                     }
-
-                    await _services.Cadastrar(hotel, imagem_names);
+                    await _business.Cadastrar(hotel, imagem_names);
                     TempData["SuccessMessage"] = "Cadastrado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
@@ -76,7 +74,7 @@ namespace ProjetoHotel.Controllers
         [HttpGet("editar/{id:long}")]
         public async Task<IActionResult> Edit(long id)
         {
-            var obj = await _services.BuscarPorId(id);
+            var obj = await _business.BuscarPorId(id);
             if(obj == null)
             {
                 return NotFound();
@@ -98,7 +96,7 @@ namespace ProjetoHotel.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    hotel = await _services.Editar(hotel, id);
+                    hotel = await _business.Editar(hotel, id);
                     TempData["SuccessMessage"] = "Editado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
@@ -118,9 +116,14 @@ namespace ProjetoHotel.Controllers
         {
             try
             {
-                await _services.Deletar(id);
+                await _business.Deletar(id);
 
                 TempData["SuccessMessage"] = "Deletado com sucesso!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ValidationException ex)
+            {
+                TempData["WarningMessage"] = ex.Message;
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception)
@@ -128,6 +131,53 @@ namespace ProjetoHotel.Controllers
                 TempData["ErrorMessage"] = "Aconteceu um problema ao deletar.";
                 return RedirectToAction(nameof(Index));
             }
+        }
+
+
+        [HttpGet("{hotel_id:long}/galeria")]
+        public async Task<IActionResult> Gallery(long hotel_id)
+        {
+            var view = await _business.RetornarParaGaleria(hotel_id);
+            ViewBag.Imagens = view.Imagens;
+            ViewBag.Hotel = view.Nome_Hotel;
+            ViewBag.Hotel_Id = hotel_id;
+            return View();
+        }
+
+        [HttpPost("{hotel_id:long}/galeria")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Gallery(ImagemRequest file, long hotel_id)
+        {
+            try
+            {
+                if (file.Imagem != null)
+                {
+                    await _business.CadastrarImagem(file, hotel_id);
+                }
+                TempData["SuccessMessage"] = "Cadastrado com sucesso!";
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Aconteceu um problema ao cadastrar.";
+            }
+            return RedirectToAction(nameof(Gallery), new { hotel_id = hotel_id });
+        }
+
+        [HttpPost("{hotel_id:long}/galeria/deletar/{id:long}")]
+        public async Task<IActionResult> DeletarImagem(long hotel_id, long id)
+        {
+            
+            try
+            {
+                await _business.DeletarImagem(hotel_id, id);
+                TempData["SuccessMessage"] = "Deletado com sucesso!";
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Aconteceu um problema ao deletar.";
+            }
+
+            return RedirectToAction(nameof(Gallery), new { hotel_id = hotel_id });
         }
     }
 }

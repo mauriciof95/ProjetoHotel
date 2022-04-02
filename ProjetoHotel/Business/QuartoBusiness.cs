@@ -7,14 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjetoHotel.Services
+namespace ProjetoHotel.Business
 {
-    public class QuartoServices
+    public class QuartoBusiness
     {
         private QuartoRepository _repository;
         private QuartoImagemRepository _repositoryQuartoImagem;
 
-        public QuartoServices(SqlDbContext context)
+        public QuartoBusiness(SqlDbContext context)
         {
             _repository = new QuartoRepository(context);
             _repositoryQuartoImagem = new QuartoImagemRepository(context);

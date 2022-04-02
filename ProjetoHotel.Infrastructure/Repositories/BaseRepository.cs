@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjetoHotel.Infrastructure.Repositories
 {
-    public class BaseRepository<TModel>  where TModel : BaseEntity
+    public class BaseRepository<TModel> where TModel : BaseEntity
     {
         public SqlDbContext _context;
         public BaseRepository(SqlDbContext context) => _context = context;
@@ -41,7 +41,11 @@ namespace ProjetoHotel.Infrastructure.Repositories
         public async Task Deletar(long id)
         {
             TModel obj = await BuscarPorId(id);
+            await Deletar(obj);
+        }
 
+        public async Task Deletar(TModel obj)
+        {
             if (obj != null)
             {
                 _context.Set<TModel>().Remove(obj);

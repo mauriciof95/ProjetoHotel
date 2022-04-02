@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <Content Remove="Views\Shared\_Navbar.cshtml" />
+    <Content Remove="wwwroot\img\baixados.png" />
+    <Content Remove="wwwroot\img\img_6436af7a3c_02042022101427.jpg" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.21" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.23" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.23" />
@@ -22,7 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProjetoHotel.Domain\ProjetoHotel.Domain.csproj" />
-    <ProjectReference Include="..\ProjetoHotel.Services\ProjetoHotel.Services.csproj" />
+    <ProjectReference Include="..\ProjetoHotel.Infrastructure\ProjetoHotel.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

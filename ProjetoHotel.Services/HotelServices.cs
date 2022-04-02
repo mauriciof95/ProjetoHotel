@@ -1,5 +1,6 @@
 ﻿using ProjetoHotel.Domain.Entities;
 using ProjetoHotel.Domain.Models;
+using ProjetoHotel.Domain.Models.Exceptions;
 using ProjetoHotel.Infrastructure.Context;
 using ProjetoHotel.Infrastructure.Repositories;
 using System.Collections.Generic;
@@ -13,10 +14,13 @@ namespace ProjetoHotel.Services
         private HotelRepository _repository;
         private HotelImagemRepository _repositoryHotelImagem;
 
+        private QuartoServices _quartoServices;
+
         public HotelServices(SqlDbContext context)
         {
             _repository = new HotelRepository(context);
             _repositoryHotelImagem = new HotelImagemRepository(context);
+            _quartoServices = new QuartoServices(context);
         }
 
 
@@ -38,9 +42,8 @@ namespace ProjetoHotel.Services
         }
 
         public async Task<List<SelectModel>> RetornarHoteisSelect()
-        {
-            return await _repository.RetornarHoteisSelect();
-        }
+            => await _repository.RetornarHoteisSelect();
+        
 
         public async Task<ICollection<Hotel>> ListarTudo()
             => await _repository.ListarTudo();
@@ -52,7 +55,21 @@ namespace ProjetoHotel.Services
             => await _repository.Editar(obj, id);
 
         public async Task Deletar(long id)
-            => await _repository.DeletarTudo(id);
-        
+        {
+            bool temQuartos = await _quartoServices.TemQuartosPorHotelId(id);
+
+            if (temQuartos) throw new ValidationException("Não é possivel deletar esse registro, pois está associado a outro registros.");
+
+            var Imagens = await _repositoryHotelImagem.RetornarPorHotelId(id);
+
+            if (Imagens.Count() > 0)
+            {
+                foreach (var img in Imagens)
+                {
+                    await _repositoryHotelImagem.Deletar(img);
+                }
+            }
+            await _repository.Deletar(id);
+        }
     }
 }

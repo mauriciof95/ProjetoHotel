@@ -35,5 +35,9 @@ namespace ProjetoHotel.Infrastructure.Repositories
             _context.Remove(obj);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> TemQuartosPorHotelId(long id)
+            => await _context.Quarto.AnyAsync(x => x.Hotel_Id == id);
+
     }
 }

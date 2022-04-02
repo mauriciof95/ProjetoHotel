@@ -20,6 +20,13 @@
     </div>
 }
 
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="msg_box msg_box_warning">
+        @TempData["WarningMessage"]
+    </div>
+}
+
 <p>
     <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Cadastrar</a>
 </p>
@@ -31,7 +38,6 @@
                 <th>CNPJ</th>
                 <th>Endereco</th>
                 <th>Descrição</th>
-                <th>Imagens</th>
                 <th colspan="2" class="text-center">Ações</th>
             </tr>
         </thead>
@@ -43,10 +49,10 @@
                     <td>@Html.DisplayFor(modelItem => item.CNPJ)</td>
                     <td>@Html.DisplayFor(modelItem => item.Endereco)</td>
                     <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
-                    <td></td>
                     <td class="text-center">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a class="btn btn-primary" asp-action="editar" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-info" asp-action="gallery" asp-route-hotel_id="@item.Id" ><i class="fas fa-image"></i></a>
                             <form asp-action="deletar" asp-route-id="@item.Id">
                                 <input type="hidden" name="Id" value="@item.Id" />
                                 <button type="submit" value="Deletar" class="btn btn-danger"><i class="fas fa-trash"></i></button>

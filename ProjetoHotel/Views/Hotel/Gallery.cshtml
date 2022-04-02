@@ -1,0 +1,69 @@
+﻿@model ProjetoHotel.Domain.Models.Request.ImagemRequest
+
+@{
+    ViewData["Title"] = "Hotel - Galeria de Fotos";
+    //@Model.Nova_Imagem = null;
+}
+
+<h1>Galeria de Fotos - @ViewBag.Hotel </h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="msg_box msg_box_error">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="msg_box msg_box_success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="msg_box msg_box_warning">
+        @TempData["WarningMessage"]
+    </div>
+}
+
+<form asp-action="Gallery" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="custom-file">
+                <label asp-for="Imagem" class="custom-file-label">Selecione uma imagem...</label>
+                <input asp-for="Imagem" class="custom-file-input" />
+                <span asp-validation-for="Imagem" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-1">
+        <div class="col-12">
+            <input type="submit" value="Cadastrar" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-danger">Cancelar</a>
+        </div>
+    </div>
+</form>
+
+<div class="mt-5">
+    @foreach (var imagem in ViewBag.Imagens)
+    {
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="~/img/@imagem.Image_Url">
+            <div class="card-body">
+                <form asp-action="DeletarImagem" asp-route-hotel_id="@ViewBag.Hotel_Id" asp-route-id="@imagem.Id">
+                    <input type="hidden" name="Id" value="@imagem.Id" />
+                    <button type="submit" value="Deletar" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

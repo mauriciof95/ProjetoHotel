@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjetoHotel.Domain.Entities;
 using ProjetoHotel.Helpers;
-using ProjetoHotel.Services;
+using ProjetoHotel.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +16,15 @@ namespace ProjetoHotel.Controllers
     [Route("quarto")]
     public class QuartoController : Controller
     {
-        private readonly QuartoServices _services;
-        private IWebHostEnvironment _hostingEnvironment;
+        private readonly QuartoBusiness _services;
+        private HotelBusiness _hotelServices;
 
-        public QuartoController(QuartoServices services, IWebHostEnvironment environment)
+        public QuartoController(
+            QuartoBusiness services,
+            HotelBusiness hotelServices)
         {
             _services = services;
-            _hostingEnvironment = environment;
+            _hotelServices = hotelServices;
         }
 
         
@@ -34,7 +36,7 @@ namespace ProjetoHotel.Controllers
         [HttpGet("cadastrar")]
         public async Task<IActionResult> Create()
         {
-            ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao");
+            ViewData["Hoteis"] = new SelectList(await _hotelServices.RetornarHoteisSelect(), "Id", "Descricao");
             return View();
         }
 
@@ -52,20 +54,20 @@ namespace ProjetoHotel.Controllers
                 {
                     if (imagens.Count() > 0)
                     {
-                        var processarImagem = new ProcessarImagem(_hostingEnvironment);
+                        var processarImagem = new ImagemHelper();
                         imagem_names = processarImagem.SalvarImagem(imagens);
                     }
                     await _services.Cadastrar(quarto, imagem_names);
                     TempData["SuccessMessage"] = "Cadastrado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
+                ViewData["Hoteis"] = new SelectList(await _hotelServices.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
                 TempData["WarningMessage"] = "Verifique se os campos estão preenchidos corretamente.";
                 return View(quarto);
             }
             catch (Exception)
             {
-                ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
+                ViewData["Hoteis"] = new SelectList(await _hotelServices.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
                 TempData["ErrorMessage"] = "Não foi possivel cadastrar";
                 return View(quarto);
             }
@@ -80,7 +82,7 @@ namespace ProjetoHotel.Controllers
                 return NotFound();
             }
 
-            ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
+            ViewData["Hoteis"] = new SelectList(await _hotelServices.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
             return View(quarto);
         }
 
@@ -101,7 +103,7 @@ namespace ProjetoHotel.Controllers
                     TempData["SuccessMessage"] = "Editado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["Hoteis"] = new SelectList(await _services.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
+                ViewData["Hoteis"] = new SelectList(await _hotelServices.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
                 TempData["WarningMessage"] = "Verifique se os campos estão preenchidos corretamente.";
                 return View(quarto);
             }

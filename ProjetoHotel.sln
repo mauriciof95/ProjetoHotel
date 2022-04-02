@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoHotel.Domain", "Proj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoHotel.Infrastructure", "ProjetoHotel.Infrastructure\ProjetoHotel.Infrastructure.csproj", "{8F5F164A-1432-4A95-9519-DF00B2B62939}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoHotel.Services", "ProjetoHotel.Services\ProjetoHotel.Services.csproj", "{C42CCBDD-FA77-4826-BEAA-96D9D541B9FB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{8F5F164A-1432-4A95-9519-DF00B2B62939}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F5F164A-1432-4A95-9519-DF00B2B62939}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F5F164A-1432-4A95-9519-DF00B2B62939}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C42CCBDD-FA77-4826-BEAA-96D9D541B9FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C42CCBDD-FA77-4826-BEAA-96D9D541B9FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C42CCBDD-FA77-4826-BEAA-96D9D541B9FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C42CCBDD-FA77-4826-BEAA-96D9D541B9FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

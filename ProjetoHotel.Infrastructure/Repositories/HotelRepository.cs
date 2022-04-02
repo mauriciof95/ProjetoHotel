@@ -22,13 +22,10 @@ namespace ProjetoHotel.Infrastructure.Repositories
 
         public async Task<Hotel> RetornarCompletoPorId(long id)
         {
-            return await _context.Hotel
-                                .Include(x => x.Imagens)
-                                .Include(x => x.Quartos).ThenInclude(x => x.Imagens)
-                                .FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Hotel.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task DeletarTudo(long id)
+        public async Task Deletar(long id)
         {
             var obj = await RetornarCompletoPorId(id);
 
