@@ -78,10 +78,10 @@ namespace ProjetoHotel.Business
             await _repository.Deletar(id);
         }
 
-        public async Task<GalleryViewModel> RetornarParaGaleria(long hotel_id)
+        public async Task<GalleryHotelViewModel> RetornarParaGaleria(long hotel_id)
         {
             var imagemHelper = new ImagemHelper();
-            GalleryViewModel viewModel = new GalleryViewModel();
+            GalleryHotelViewModel viewModel = new GalleryHotelViewModel();
             Hotel hotel = await BuscarPorId(hotel_id);
             viewModel.Imagens = await _hotelImagemRepository.RetornarPorHotelId(hotel_id);
             viewModel.Nome_Hotel = hotel.Nome;

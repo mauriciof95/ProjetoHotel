@@ -49,6 +49,7 @@
                     <td class="text-center">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a class="btn btn-primary" asp-action="editar" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-info" asp-action="gallery" asp-route-quarto_id="@item.Id"><i class="fas fa-image"></i></a>
                             <form asp-action="deletar" asp-route-id="@item.Id">
                                 <input type="hidden" name="Id" value="@item.Id" />
                                 <button type="submit" value="Deletar" class="btn btn-danger"><i class="fas fa-trash"></i></button>

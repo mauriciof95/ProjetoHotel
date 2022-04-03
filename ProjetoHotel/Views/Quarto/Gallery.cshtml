@@ -1,10 +1,10 @@
 ﻿@model ProjetoHotel.Domain.Models.Request.ImagemRequest
 
 @{
-    ViewData["Title"] = "Hotel - Galeria de Fotos";
+    ViewData["Title"] = "Quarto - Galeria de Fotos";
 }
 
-<h1>Galeria de Fotos - @ViewBag.Hotel </h1>
+<h1>Galeria de Fotos - @ViewBag.Quarto </h1>
 
 @if (TempData["ErrorMessage"] != null)
 {
@@ -47,23 +47,21 @@
     </div>
 </form>
 
-
 <div class="mt-5">
-    <div class="card-columns">
-        @foreach (var imagem in ViewBag.Imagens)
-        {
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="~/img/@imagem.Image_Url">
-                <div class="card-body">
-                    <form asp-action="DeletarImagem" asp-route-hotel_id="@ViewBag.Hotel_Id" asp-route-id="@imagem.Id">
-                        <input type="hidden" name="Id" value="@imagem.Id" />
-                        <button type="submit" value="Deletar" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </form>
-                </div>
+    @foreach (var imagem in ViewBag.Imagens)
+    {
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="~/img/@imagem.Image_Url">
+            <div class="card-body">
+                <form asp-action="DeletarImagem" asp-route-quarto_id="@ViewBag.Quarto_Id" asp-route-id="@imagem.Id">
+                    <input type="hidden" name="Id" value="@imagem.Id" />
+                    <button type="submit" value="Deletar" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                </form>
             </div>
-        }
-    </div>
+        </div>
+    }
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
