@@ -1,18 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProjetoHotel.Infrastructure.Context;
-using ProjetoHotel.Infrastructure.Repositories;
-using ProjetoHotel.Business;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ProjetoHotel.Extension;
 using ProjetoHotel.Helpers;
+using ProjetoHotel.Infrastructure.Context;
 
 namespace ProjetoHotel
 {
@@ -25,23 +19,37 @@ namespace ProjetoHotel
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<SqlDbContext>(o => {
+            services.AddDbContext<SqlDbContext>(o =>
+            {
                 o.UseSqlServer(SqlDbContext.ConnectionString);
             });
 
-            services.AddScoped<HotelBusiness>();
-            services.AddScoped<QuartoBusiness>();
+            //apenas para não poluir o startup caso o projeto 
+            //tivesse inumeros services para Injeção de Dependencia
+            services.ConfigureServices();
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //so para nao precisar add IWebHost como ID so para pegar o path do wwwroot
             ImagemHelper.pathString = env.WebRootPath;
+
+
+            //apenas para rodar as migrações ao iniciar o projeto
+            //e não precisar sempre dar update-database para o banco de produção
+            try
+            {
+                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetRequiredService<SqlDbContext>();
+                    context.Database.Migrate();
+                }
+            }
+            catch { }
+
 
             if (env.IsDevelopment())
             {
@@ -50,7 +58,6 @@ namespace ProjetoHotel
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

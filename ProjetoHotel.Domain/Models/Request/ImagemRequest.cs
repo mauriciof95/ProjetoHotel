@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjetoHotel.Domain.Models.Request

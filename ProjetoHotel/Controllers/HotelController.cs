@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using ProjetoHotel.Domain.Entities;
 using ProjetoHotel.Domain.Models.Exceptions;
-using ProjetoHotel.Helpers;
-using ProjetoHotel.Infrastructure.Context;
-using ProjetoHotel.Business;
 using ProjetoHotel.Domain.Models.Request;
+using ProjetoHotel.Helpers;
+using ProjetoHotel.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ProjetoHotel.Controllers
 {
@@ -21,15 +16,15 @@ namespace ProjetoHotel.Controllers
     public class HotelController : Controller
     {
 
-        private readonly HotelBusiness _business;
+        private readonly HotelServices _services;
 
-        public HotelController(HotelBusiness services)
-            => _business = services;
+        public HotelController(HotelServices services)
+            => _services = services;
         
 
         public async Task<IActionResult> Index()
         {
-            return View(await _business.ListarTudo());
+            return View(await _services.ListarTudo());
         }
 
         [HttpGet("cadastrar")]
@@ -55,26 +50,24 @@ namespace ProjetoHotel.Controllers
                         var processarImagem = new ImagemHelper();
                         imagem_names = processarImagem.SalvarImagem(imagens);
                     }
-                    await _business.Cadastrar(hotel, imagem_names);
+                    await _services.Cadastrar(hotel, imagem_names);
                     TempData["SuccessMessage"] = "Cadastrado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
-
                 TempData["WarningMessage"] = "Verifique se os campos estão preenchidos corretamente.";
-                return View(hotel);
             }
             catch (Exception)
             {
-                TempData["ErrorMessage"] = "Não foi possivel cadastrar";
-                return View(hotel);
+                TempData["ErrorMessage"] = "Não foi possivel cadastrar"; 
             }
+            return View(hotel);
         }
 
 
         [HttpGet("editar/{id:long}")]
         public async Task<IActionResult> Edit(long id)
         {
-            var obj = await _business.BuscarPorId(id);
+            var obj = await _services.BuscarPorId(id);
             if(obj == null)
             {
                 return NotFound();
@@ -96,7 +89,7 @@ namespace ProjetoHotel.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    hotel = await _business.Editar(hotel, id);
+                    hotel = await _services.Editar(hotel, id);
                     TempData["SuccessMessage"] = "Editado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
@@ -116,28 +109,28 @@ namespace ProjetoHotel.Controllers
         {
             try
             {
-                await _business.Deletar(id);
+                await _services.Deletar(id);
 
                 TempData["SuccessMessage"] = "Deletado com sucesso!";
-                return RedirectToAction(nameof(Index));
             }
             catch (ValidationException ex)
             {
                 TempData["WarningMessage"] = ex.Message;
-                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {
                 TempData["ErrorMessage"] = "Aconteceu um problema ao deletar.";
-                return RedirectToAction(nameof(Index));
             }
+            return RedirectToAction(nameof(Index));
         }
 
 
         [HttpGet("{hotel_id:long}/galeria")]
         public async Task<IActionResult> Gallery(long hotel_id)
         {
-            var view = await _business.RetornarParaGaleria(hotel_id);
+            var view = await _services.RetornarParaGaleria(hotel_id);
+            if (view == null) return NotFound();
+
             ViewBag.Imagens = view.Imagens;
             ViewBag.Hotel = view.Nome_Hotel;
             ViewBag.Hotel_Id = hotel_id;
@@ -152,7 +145,7 @@ namespace ProjetoHotel.Controllers
             {
                 if (file.Imagem != null)
                 {
-                    await _business.CadastrarImagem(file, hotel_id);
+                    await _services.CadastrarImagem(file, hotel_id);
                 }
                 TempData["SuccessMessage"] = "Cadastrado com sucesso!";
             }
@@ -169,7 +162,7 @@ namespace ProjetoHotel.Controllers
             
             try
             {
-                await _business.DeletarImagem(hotel_id, id);
+                await _services.DeletarImagem(hotel_id, id);
                 TempData["SuccessMessage"] = "Deletado com sucesso!";
             }
             catch (Exception)

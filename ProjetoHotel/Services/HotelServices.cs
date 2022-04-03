@@ -1,4 +1,5 @@
 ﻿using ProjetoHotel.Domain.Entities;
+using ProjetoHotel.Domain.Interfaces;
 using ProjetoHotel.Domain.Models;
 using ProjetoHotel.Domain.Models.Exceptions;
 using ProjetoHotel.Domain.Models.Request;
@@ -11,20 +12,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjetoHotel.Business
+namespace ProjetoHotel.Services
 {
-    public class HotelBusiness
+    public class HotelServices : IHotelServices
     {
         private HotelRepository _repository;
         private HotelImagemRepository _hotelImagemRepository;
 
-        private QuartoBusiness _quartoServices;
+        private QuartoServices _quartoServices;
 
-        public HotelBusiness(SqlDbContext context)
+        public HotelServices(SqlDbContext context)
         {
             _repository = new HotelRepository(context);
             _hotelImagemRepository = new HotelImagemRepository(context);
-            _quartoServices = new QuartoBusiness(context);
+            _quartoServices = new QuartoServices(context);
         }
 
 
@@ -80,9 +81,14 @@ namespace ProjetoHotel.Business
 
         public async Task<GalleryHotelViewModel> RetornarParaGaleria(long hotel_id)
         {
+            Hotel hotel = await BuscarPorId(hotel_id);
+            if(hotel == null)
+            {
+                return null;
+            }
+
             var imagemHelper = new ImagemHelper();
             GalleryHotelViewModel viewModel = new GalleryHotelViewModel();
-            Hotel hotel = await BuscarPorId(hotel_id);
             viewModel.Imagens = await _hotelImagemRepository.RetornarPorHotelId(hotel_id);
             viewModel.Nome_Hotel = hotel.Nome;
             return viewModel;

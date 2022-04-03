@@ -1,23 +1,22 @@
 ﻿using ProjetoHotel.Domain.Entities;
-using ProjetoHotel.Domain.Models;
+using ProjetoHotel.Domain.Interfaces;
 using ProjetoHotel.Domain.Models.Request;
 using ProjetoHotel.Domain.Models.ViewModel;
 using ProjetoHotel.Helpers;
 using ProjetoHotel.Infrastructure.Context;
 using ProjetoHotel.Infrastructure.Repositories;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjetoHotel.Business
+namespace ProjetoHotel.Services
 {
-    public class QuartoBusiness
+    public class QuartoServices : IQuartoServices
     {
         private QuartoRepository _repository;
         private QuartoImagemRepository _quartoImagemRepository;
 
-        public QuartoBusiness(SqlDbContext context)
+        public QuartoServices(SqlDbContext context)
         {
             _repository = new QuartoRepository(context);
             _quartoImagemRepository = new QuartoImagemRepository(context);
@@ -74,9 +73,11 @@ namespace ProjetoHotel.Business
 
         public async Task<GalleryQuartoViewModel> RetornarParaGaleria(long quarto_id)
         {
+            Quarto quarto = await BuscarPorId(quarto_id);
+            if (quarto == null) return null;
+
             var imagemHelper = new ImagemHelper();
             GalleryQuartoViewModel viewModel = new GalleryQuartoViewModel();
-            Quarto quarto = await BuscarPorId(quarto_id);
             viewModel.Imagens = await _quartoImagemRepository.RetornarPorQuartoId(quarto_id);
             viewModel.Nome_Quarto = quarto.Nome;
             return viewModel;

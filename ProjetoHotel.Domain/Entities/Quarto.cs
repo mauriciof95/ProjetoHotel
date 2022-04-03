@@ -41,13 +41,13 @@ namespace ProjetoHotel.Domain.Entities
 
         [Column("preco", Order = 5)]
         [Required(ErrorMessage = "O campo \"{0}\" é obrigatório")]
-        [Range(1, 99999.99, ErrorMessage = "O Campo \"{0}\" deve estar entre {1} e {2}.")]
+        [Range(1, double.MaxValue, ErrorMessage = "O Campo \"{0}\" deve ser maior que 0.")]
         [Display(Name = "Preço R$")]
         public decimal Preco { get; set; }
 
 
 
-        [Column("hotel_id", Order = 4)]
+        [Column("hotel_id", Order = 6)]
         [Required(ErrorMessage = "Selecione um hotel.")]
         public virtual long Hotel_Id { get; set; }
 

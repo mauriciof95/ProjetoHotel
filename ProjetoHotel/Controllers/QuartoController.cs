@@ -1,37 +1,35 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using ProjetoHotel.Domain.Entities;
+using ProjetoHotel.Domain.Models.Request;
 using ProjetoHotel.Helpers;
-using ProjetoHotel.Business;
+using ProjetoHotel.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ProjetoHotel.Domain.Models.Request;
 
 namespace ProjetoHotel.Controllers
 {
     [Route("quarto")]
     public class QuartoController : Controller
     {
-        private readonly QuartoBusiness _business;
-        private HotelBusiness _hotelBusiness;
+        private readonly QuartoServices _services;
+        private HotelServices _hotelBusiness;
 
         public QuartoController(
-            QuartoBusiness services,
-            HotelBusiness hotelServices)
+            QuartoServices services,
+            HotelServices hotelServices)
         {
-            _business = services;
+            _services = services;
             _hotelBusiness = hotelServices;
         }
 
         
         public async Task<IActionResult> Index()
         {
-            return View(await _business.ListarTudo());
+            return View(await _services.ListarTudo());
         }
 
         [HttpGet("cadastrar")]
@@ -58,26 +56,25 @@ namespace ProjetoHotel.Controllers
                         var processarImagem = new ImagemHelper();
                         imagem_names = processarImagem.SalvarImagem(imagens);
                     }
-                    await _business.Cadastrar(quarto, imagem_names);
+                    await _services.Cadastrar(quarto, imagem_names);
                     TempData["SuccessMessage"] = "Cadastrado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["Hoteis"] = new SelectList(await _hotelBusiness.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
                 TempData["WarningMessage"] = "Verifique se os campos estão preenchidos corretamente.";
-                return View(quarto);
             }
             catch (Exception)
             {
                 ViewData["Hoteis"] = new SelectList(await _hotelBusiness.RetornarHoteisSelect(), "Id", "Descricao", quarto.Hotel_Id);
                 TempData["ErrorMessage"] = "Não foi possivel cadastrar";
-                return View(quarto);
             }
+            return View(quarto);
         }
 
         [HttpGet("editar/{id:long}")]
         public async Task<IActionResult> Edit(long id)
         {
-            var quarto = await _business.BuscarPorId(id);
+            var quarto = await _services.BuscarPorId(id);
             if (quarto == null)
             {
                 return NotFound();
@@ -100,7 +97,7 @@ namespace ProjetoHotel.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    quarto = await _business.Editar(quarto, id);
+                    quarto = await _services.Editar(quarto, id);
                     TempData["SuccessMessage"] = "Editado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
@@ -120,22 +117,25 @@ namespace ProjetoHotel.Controllers
         {
             try
             {
-                await _business.Deletar(id);
-
+                await _services.Deletar(id);
                 TempData["SuccessMessage"] = "Deletado com sucesso!";
-                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {
                 TempData["ErrorMessage"] = "Aconteceu um problema ao deletar.";
-                return RedirectToAction(nameof(Index));
             }
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet("{quarto_id:long}/galeria")]
         public async Task<IActionResult> Gallery(long quarto_id)
         {
-            var view = await _business.RetornarParaGaleria(quarto_id);
+            var view = await _services.RetornarParaGaleria(quarto_id);
+            if(view == null)
+            {
+                return NotFound();
+            }
+
             ViewBag.Imagens = view.Imagens;
             ViewBag.Quarto = view.Nome_Quarto;
             ViewBag.Quarto_Id = quarto_id;
@@ -150,7 +150,7 @@ namespace ProjetoHotel.Controllers
             {
                 if (file.Imagem != null)
                 {
-                    await _business.CadastrarImagem(file, quarto_id);
+                    await _services.CadastrarImagem(file, quarto_id);
                 }
                 TempData["SuccessMessage"] = "Cadastrado com sucesso!";
             }
@@ -167,7 +167,7 @@ namespace ProjetoHotel.Controllers
 
             try
             {
-                await _business.DeletarImagem(quarto_id, id);
+                await _services.DeletarImagem(quarto_id, id);
                 TempData["SuccessMessage"] = "Deletado com sucesso!";
             }
             catch (Exception)
